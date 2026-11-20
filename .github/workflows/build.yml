@@ -29,7 +29,9 @@ jobs:
           cp -R /tmp/mazowsze/app .
           cp /tmp/mazowsze/*.gradle.kts .
           cp /tmp/mazowsze/gradle.properties .
-
+      - name: Align Java target
+        run: |
+          sed -i 's/JavaVersion.VERSION_1_8/JavaVersion.VERSION_17/g' app/build.gradle.kts
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
