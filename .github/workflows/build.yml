@@ -1,14 +1,47 @@
 
 name: Build Mazowsze Bakery APK
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'mazowsze-bakery-android-starter.zip'
+      - '.github/workflows/build.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Test
-        run: echo "Mazowsze Bakery is ready"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Extract Android project
+        run: |
+          mkdir -p /tmp/mazowsze
+          unzip mazowsze-bakery-android-starter.zip -d /tmp/mazowsze
+          cp -R /tmp/mazowsze/app .
+          cp /tmp/mazowsze/*.gradle.kts .
+          cp /tmp/mazowsze/gradle.properties .
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build APK
+        run: gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mazowsze-Bakery-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          z Że
         
