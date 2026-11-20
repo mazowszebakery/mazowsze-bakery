@@ -29,9 +29,27 @@ jobs:
           cp -R /tmp/mazowsze/app .
           cp /tmp/mazowsze/*.gradle.kts .
           cp /tmp/mazowsze/gradle.properties .
-      - name: Align Java target
+          
+      - name: Set Java and Kotlin targets
         run: |
-          sed -i 's/JavaVersion.VERSION_1_8/JavaVersion.VERSION_17/g' app/build.gradle.kts
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("app/build.gradle.kts")
+          s = p.read_text()
+          marker = '    buildFeatures { compose = true }'
+          addition = """    compileOptions {
+              sourceCompatibility = JavaVersion.VERSION_17
+              targetCompatibility = JavaVersion.VERSION_17
+          }
+          kotlinOptions {
+              jvmTarget = "17"
+          }
+          """
+          if "compileOptions {" not in s:
+              s = s.replace(marker, addition + marker)
+          p.write_text(s)
+          PY  
+          
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
