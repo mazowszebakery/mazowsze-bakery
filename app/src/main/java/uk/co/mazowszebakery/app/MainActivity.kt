@@ -178,6 +178,7 @@ fun BakeryApp(context: Context) {
 var editedName by remember { mutableStateOf("") }
 var editedPrice by remember { mutableStateOf("") }
 var showClearHistoryConfirm by remember { mutableStateOf(false) }
+var orderToDelete by remember { mutableStateOf<SavedOrder?>(null) }
 
     val categories = listOf(
         "Wszystkie",
@@ -450,68 +451,79 @@ editedPrice = product.price.toString()
                     }
 
                     
-                    "Historia" -> {
+                    
+"Historia" -> {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            "Historia zamówień",
+            fontSize = 21.sp,
+            fontWeight = FontWeight.Bold,
+            color = Ink
+        )
+
+        TextButton(
+            onClick = { showClearHistoryConfirm = true },
+            enabled = history.isNotEmpty()
+        ) {
+            Text("Wyczyść", color = Color.Red)
+        }
+    }
+
+    Spacer(Modifier.height(10.dp))
+
+    if (history.isEmpty()) {
+        Text("Nie zapisano jeszcze zamówień.", color = Color.Gray)
+    } else {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(history) { order ->
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    )
+                ) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(14.dp)
+                    ) {
                         Text(
-                            "Historia zamówień",
-                            fontSize = 21.sp,
+                            order.date,
                             fontWeight = FontWeight.Bold,
                             color = Ink
                         )
 
-                        Spacer(Modifier.height(10.dp))
+                        Spacer(Modifier.height(6.dp))
 
-                        if (history.isEmpty()) {
-                            Text(
-                                "Nie zapisano jeszcze zamówień.",
-                                color = Color.Gray
-                            )
-                        } else {
-                            LazyColumn(
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                items(history) { order ->
-                                    Card(
-                                        colors = CardDefaults.cardColors(
-                                            containerColor = Color.White
-                                        )
-                                    ) {
-                                        Column(
-                                            Modifier
-                                                .fillMaxWidth()
-                                                .padding(14.dp)
-                                        ) {
-                                            Text(
-                                                order.date,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Ink
-                                            )
+                        order.lines.forEach { line ->
+                            Text(line, fontSize = 13.sp, color = Ink)
+                        }
 
-                                            Spacer(Modifier.height(6.dp))
+                        Spacer(Modifier.height(6.dp))
 
-                                            order.lines.forEach { line ->
-                                                Text(
-                                                    line,
-                                                    fontSize = 13.sp,
-                                                    color = Ink
-                                                )
-                                            }
+                        Text(
+                            "Razem: £%.2f".format(Locale.UK, order.total),
+                            fontWeight = FontWeight.Bold,
+                            color = Ink
+                        )
 
-                                            Spacer(Modifier.height(6.dp))
-
-                                            Text(
-                                                "Razem: £%.2f".format(
-                                                    Locale.UK,
-                                                    order.total
-                                                ),
-                                                fontWeight = FontWeight.Bold,
-                                                color = Ink
-                                            )
-                                        }
-                                    }
-                                }
-                            }
+                        TextButton(
+                            onClick = { orderToDelete = order }
+                        ) {
+                            Text("Usuń zamówienie", color = Color.Red)
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
 
 
                     else -> {
@@ -535,6 +547,55 @@ editedPrice = product.price.toString()
                 }
             }
         }
+
+if (orderToDelete != null) {
+    AlertDialog(
+        onDismissRequest = { orderToDelete = null },
+        title = { Text("Usunąć zamówienie?") },
+        text = { Text("Zamówienie zostanie usunięte z historii.") },
+        confirmButton = {
+            TextButton(onClick = {
+                orderToDelete?.let { order ->
+                    val index = history.indexOf(order)
+                    if (index >= 0) history.removeAt(index)
+                    saveHistory()
+                }
+                orderToDelete = null
+            }) {
+                Text("Usuń", color = Color.Red)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { orderToDelete = null }) {
+                Text("Anuluj")
+            }
+        }
+    )
+}
+
+if (showClearHistoryConfirm) {
+    AlertDialog(
+        onDismissRequest = { showClearHistoryConfirm = false },
+        title = { Text("Wyczyścić całą historię?") },
+        text = {
+            Text("Wszystkie zamówienia zostaną usunięte. Tej operacji nie można cofnąć.")
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                history.clear()
+                saveHistory()
+                showClearHistoryConfirm = false
+            }) {
+                Text("Wyczyść", color = Color.Red)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { showClearHistoryConfirm = false }) {
+                Text("Anuluj")
+            }
+        }
+    )
+}
 
         if (editingId != null) {
             AlertDialog(
