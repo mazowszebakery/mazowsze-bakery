@@ -1,18 +1,18 @@
+
 name: Build Mazowsze Bakery APK
 
 on:
-  workflow_dispatch:
   push:
-    paths:
-      - 'mazowsze-bakery-android-starter.zip'
-      - '.github/workflows/build.yml'
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Java
@@ -21,24 +21,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Extract Android project
-        run: |
-          mkdir -p /tmp/mazowsze
-          unzip mazowsze-bakery-android-starter.zip -d /tmp/mazowsze
-          cp -R /tmp/mazowsze/app .
-          cp /tmp/mazowsze/*.gradle.kts .
-          cp /tmp/mazowsze/gradle.properties .
-
-      - name: Set Java compile target to 17
-        run: >-
-          python3 -c 'from pathlib import Path; p=Path("app/build.gradle.kts"); s=p.read_text(); marker="    buildFeatures { compose = true }"; addition="    compileOptions {" + chr(10) + "        sourceCompatibility = JavaVersion.VERSION_17" + chr(10) + "        targetCompatibility = JavaVersion.VERSION_17" + chr(10) + "    }" + chr(10); assert marker in s, "Android build configuration not found"; p.write_text(s.replace(marker, addition + marker, 1))'
-
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Build APK
+      - name: Build Android APK
         run: gradle assembleDebug
 
       - name: Upload APK
