@@ -540,13 +540,25 @@ editedPrice = product.price.toString()
             AlertDialog(
                 onDismissRequest = { editingId = null },
                 title = { Text("Edytuj nazwę produktu") },
-                text = {
-                    OutlinedTextField(
-                        value = editedName,
-                        onValueChange = { editedName = it },
-                        label = { Text("Nazwa produktu") },
-                        singleLine = true
-                    )
+                
+text = {
+    Column {
+        OutlinedTextField(
+            value = editedName,
+            onValueChange = { editedName = it },
+            label = { Text("Nazwa produktu") },
+            singleLine = true
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        OutlinedTextField(
+            value = editedPrice,
+            onValueChange = { editedPrice = it },
+            label = { Text("Cena (£)") },
+            singleLine = true
+        )
+    }
                 },
                 confirmButton = {
                     TextButton(onClick = {
@@ -554,15 +566,21 @@ editedPrice = product.price.toString()
                             it.id == editingId
                         }
                         val newName = editedName.trim()
+                        val newPrice = editedPrice.replace(",", ".").toDoubleOrNull()
                         val duplicate = products.any {
                             it.id != editingId &&
                                 it.name.equals(newName, ignoreCase = true)
                         }
 
-                        if (index >= 0 && newName.isNotBlank() && !duplicate) {
-                            products[index] = products[index].copy(name = newName)
-                            saveProducts()
-                        }
+                        if (index >= 0 && newName.isNotBlank() &&
+    !duplicate && newPrice != null && newPrice >= 0.0
+) {
+    products[index] = products[index].copy(
+        name = newName,
+        price = newPrice
+    )
+    saveProducts()
+}
                         editingId = null
                     }) {
                         Text("Zapisz")
