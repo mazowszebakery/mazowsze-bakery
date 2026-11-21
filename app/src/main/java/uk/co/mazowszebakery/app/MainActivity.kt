@@ -446,6 +446,7 @@ fun BakeryApp(context: Context) {
                         }
                     }
 
+                    
                     "Historia" -> {
                         Text(
                             "Historia zamówień",
@@ -453,10 +454,14 @@ fun BakeryApp(context: Context) {
                             fontWeight = FontWeight.Bold,
                             color = Ink
                         )
+
                         Spacer(Modifier.height(10.dp))
 
                         if (history.isEmpty()) {
-                            Text("Nie zapisano jeszcze zamówień.", color = Color.Gray)
+                            Text(
+                                "Nie zapisano jeszcze zamówień.",
+                                color = Color.Gray
+                            )
                         } else {
                             LazyColumn(
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -467,36 +472,44 @@ fun BakeryApp(context: Context) {
                                             containerColor = Color.White
                                         )
                                     ) {
-                               
+                                        Column(
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(14.dp)
+                                        ) {
+                                            Text(
+                                                order.date,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Ink
+                                            )
 
-                                    Column(
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .padding(14.dp)
-                                    ) {
-                                        Text(
-                                            order.date,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Ink
-                                        )
-                                        Spacer(Modifier.height(6.dp))
-                                        order.lines.forEach {
-                                            Text(it, fontSize = 13.sp, color = Ink)
+                                            Spacer(Modifier.height(6.dp))
+
+                                            order.lines.forEach { line ->
+                                                Text(
+                                                    line,
+                                                    fontSize = 13.sp,
+                                                    color = Ink
+                                                )
+                                            }
+
+                                            Spacer(Modifier.height(6.dp))
+
+                                            Text(
+                                                "Razem: £%.2f".format(
+                                                    Locale.UK,
+                                                    order.total
+                                                ),
+                                                fontWeight = FontWeight.Bold,
+                                                color = Ink
+                                            )
                                         }
-                                        Spacer(Modifier.height(6.dp))
-                                        Text(
-                                            "Razem: £%.2f".format(
-                                                Locale.UK,
-                                                order.total
-                                            ),
-                                            fontWeight = FontWeight.Bold,
-                                            color = Ink
-                                        )
                                     }
                                 }
                             }
                         }
                     }
+
 
                     else -> {
                         Text(
