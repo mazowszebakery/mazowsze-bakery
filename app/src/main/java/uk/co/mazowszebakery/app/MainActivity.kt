@@ -1,3 +1,5 @@
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 package uk.co.mazowszebakery.app
 
 import android.os.Bundle
@@ -264,21 +266,37 @@ var orderToDelete by remember { mutableStateOf<SavedOrder?>(null) }
                     .padding(padding)
                     .padding(16.dp)
             ) {
-                Text(
-                    "MAZOWSZE BAKERY",
-                    color = Ink,
-                    fontSize = 27.sp,
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 3.sp
-                )
-                Text(
-                    "BAKERY • ZAMÓWIENIA",
-                    color = Gold,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(12.dp)
+) {
+    Image(
+        painter = painterResource(
+            id = R.drawable.mazowsze_logo
+        ),
+        contentDescription = "Mazowsze Bakery Logo",
+        modifier = Modifier.size(65.dp)
+    )
 
-                Spacer(Modifier.height(18.dp))
+    Column {
+        Text(
+            "MAZOWSZE BAKERY",
+            color = Ink,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Black,
+            letterSpacing = 1.5.sp
+        )
+
+        Text(
+            "BAKERY • ZAMÓWIENIA",
+            color = Gold,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+Spacer(Modifier.height(18.dp))
 
                 when (tab) {
                     "Zamówienie" -> {
