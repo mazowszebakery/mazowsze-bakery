@@ -6,7 +6,7 @@
         android:label="Mazowsze Bakery"
         android:supportsRtl="true">
         <activity
-            android:name=".MainActivity"
+            android:name="uk.co.mazowszebakery.app.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
