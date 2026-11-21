@@ -466,4 +466,19 @@ fun BakeryApp(context: Context) {
                             "Wersja demonstracyjna. Logowanie pracowników " +
                                 "i panel administratora zostaną dodane po " +
                                 "podłączeniu bezpiecznej bazy online.",
-                            color 
+                            color color = Ink
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "Zapisane zamówienia i ilości są przechowywane " +
+                                "tylko na tym telefonie.",
+                            color = Color.Gray,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
