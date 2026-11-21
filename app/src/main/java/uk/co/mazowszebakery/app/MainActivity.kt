@@ -178,8 +178,6 @@ fun BakeryApp(context: Context) {
 var editedName by remember { mutableStateOf("") }
 var editedPrice by remember { mutableStateOf("") }
 var showClearHistoryConfirm by remember { mutableStateOf(false) }
-    var editedPrice by remember { mutableStateOf("") }
-var showClearHistoryConfirm by remember { mutableStateOf(false) }
 
     val categories = listOf(
         "Wszystkie",
