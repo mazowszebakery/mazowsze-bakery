@@ -1,4 +1,3 @@
-
 package uk.co.mazowszebakery.app
 
 import android.os.Bundle
@@ -30,6 +29,7 @@ private val Gold = Color(0xFFC6A15B)
 private val Cream = Color(0xFFF7F3EA)
 
 data class BakeryProduct(
+    val id: String,
     val name: String,
     val unit: String,
     val price: Double,
@@ -42,61 +42,57 @@ data class SavedOrder(
     val total: Double
 )
 
-private val catalogue = listOf(
-    BakeryProduct("Chleb pszenny", "szt.", 1.80, "Chleby"),
-    BakeryProduct("Chleb żytni", "szt.", 2.10, "Chleby"),
-    BakeryProduct("Chleb wiejski", "szt.", 2.40, "Chleby"),
-    BakeryProduct("Chleb graham", "szt.", 2.20, "Chleby"),
-    BakeryProduct("Chleb razowy", "szt.", 2.30, "Chleby"),
-    BakeryProduct("Chleb orkiszowy", "szt.", 2.80, "Chleby"),
-    BakeryProduct("Chleb wieloziarnisty", "szt.", 2.60, "Chleby"),
-    BakeryProduct("Chleb tostowy", "szt.", 1.90, "Chleby"),
-    BakeryProduct("Chleb na zakwasie", "szt.", 3.00, "Chleby"),
-    BakeryProduct("Chleb bezglutenowy", "szt.", 3.50, "Chleby"),
-
-    BakeryProduct("Bułka kajzerka", "szt.", 0.45, "Bułki"),
-    BakeryProduct("Bułka maślana", "szt.", 0.65, "Bułki"),
-    BakeryProduct("Bułka grahamka", "szt.", 0.55, "Bułki"),
-    BakeryProduct("Bułka wieloziarnista", "szt.", 0.60, "Bułki"),
-    BakeryProduct("Bułka hot dog", "szt.", 0.70, "Bułki"),
-    BakeryProduct("Bułka hamburgerowa", "szt.", 0.70, "Bułki"),
-    BakeryProduct("Bagietka", "szt.", 1.25, "Bułki"),
-    BakeryProduct("Ciabatta", "szt.", 1.10, "Bułki"),
-    BakeryProduct("Paluch z sezamem", "szt.", 0.75, "Bułki"),
-    BakeryProduct("Precel", "szt.", 0.80, "Bułki"),
-
-    BakeryProduct("Pączek", "szt.", 1.10, "Słodkie wypieki"),
-    BakeryProduct("Drożdżówka z serem", "szt.", 1.50, "Słodkie wypieki"),
-    BakeryProduct("Drożdżówka z makiem", "szt.", 1.50, "Słodkie wypieki"),
-    BakeryProduct("Drożdżówka z jabłkiem", "szt.", 1.45, "Słodkie wypieki"),
-    BakeryProduct("Rogal maślany", "szt.", 1.40, "Słodkie wypieki"),
-    BakeryProduct("Rogal z czekoladą", "szt.", 1.60, "Słodkie wypieki"),
-    BakeryProduct("Croissant", "szt.", 1.30, "Słodkie wypieki"),
-    BakeryProduct("Muffin czekoladowy", "szt.", 1.50, "Słodkie wypieki"),
-    BakeryProduct("Muffin jagodowy", "szt.", 1.50, "Słodkie wypieki"),
-    BakeryProduct("Cynamonka", "szt.", 1.40, "Słodkie wypieki"),
-
-    BakeryProduct("Sernik", "kg", 12.00, "Ciasta i desery"),
-    BakeryProduct("Makowiec", "kg", 11.00, "Ciasta i desery"),
-    BakeryProduct("Szarlotka", "kg", 10.00, "Ciasta i desery"),
-    BakeryProduct("Brownie", "kg", 13.00, "Ciasta i desery"),
-    BakeryProduct("Biszkopt z kremem", "kg", 14.00, "Ciasta i desery"),
-    BakeryProduct("Ciasto marchewkowe", "kg", 12.00, "Ciasta i desery"),
-    BakeryProduct("Karpatka", "kg", 13.00, "Ciasta i desery"),
-    BakeryProduct("Keks", "kg", 11.00, "Ciasta i desery"),
-    BakeryProduct("Piernik", "kg", 12.00, "Ciasta i desery"),
-    BakeryProduct("Beza", "szt.", 2.50, "Ciasta i desery"),
-
-    BakeryProduct("Pizza bułka", "szt.", 1.40, "Pozostałe"),
-    BakeryProduct("Pasztecik z mięsem", "szt.", 1.50, "Pozostałe"),
-    BakeryProduct("Pasztecik z kapustą", "szt.", 1.40, "Pozostałe"),
-    BakeryProduct("Drożdżówka z budyniem", "szt.", 1.50, "Pozostałe"),
-    BakeryProduct("Chleb czosnkowy", "szt.", 1.80, "Pozostałe"),
-    BakeryProduct("Focaccia", "szt.", 2.20, "Pozostałe"),
-    BakeryProduct("Sucharki", "kg", 8.00, "Pozostałe"),
-    BakeryProduct("Bułka tarta", "kg", 3.50, "Pozostałe"),
-    BakeryProduct("Ciastka kruche", "kg", 9.00, "Pozostałe"),
-    BakeryProduct("Rogal z makiem", "szt.", 1.50, "Pozostałe")
+private val defaultProducts = listOf(
+    BakeryProduct("1", "Chleb pszenny", "szt.", 1.80, "Chleby"),
+    BakeryProduct("2", "Chleb żytni", "szt.", 2.10, "Chleby"),
+    BakeryProduct("3", "Chleb wiejski", "szt.", 2.40, "Chleby"),
+    BakeryProduct("4", "Chleb graham", "szt.", 2.20, "Chleby"),
+    BakeryProduct("5", "Chleb razowy", "szt.", 2.30, "Chleby"),
+    BakeryProduct("6", "Chleb orkiszowy", "szt.", 2.80, "Chleby"),
+    BakeryProduct("7", "Chleb wieloziarnisty", "szt.", 2.60, "Chleby"),
+    BakeryProduct("8", "Chleb tostowy", "szt.", 1.90, "Chleby"),
+    BakeryProduct("9", "Chleb na zakwasie", "szt.", 3.00, "Chleby"),
+    BakeryProduct("10", "Chleb bezglutenowy", "szt.", 3.50, "Chleby"),
+    BakeryProduct("11", "Bułka kajzerka", "szt.", 0.45, "Bułki"),
+    BakeryProduct("12", "Bułka maślana", "szt.", 0.65, "Bułki"),
+    BakeryProduct("13", "Bułka grahamka", "szt.", 0.55, "Bułki"),
+    BakeryProduct("14", "Bułka wieloziarnista", "szt.", 0.60, "Bułki"),
+    BakeryProduct("15", "Bułka hot dog", "szt.", 0.70, "Bułki"),
+    BakeryProduct("16", "Bułka hamburgerowa", "szt.", 0.70, "Bułki"),
+    BakeryProduct("17", "Bagietka", "szt.", 1.25, "Bułki"),
+    BakeryProduct("18", "Ciabatta", "szt.", 1.10, "Bułki"),
+    BakeryProduct("19", "Paluch z sezamem", "szt.", 0.75, "Bułki"),
+    BakeryProduct("20", "Precel", "szt.", 0.80, "Bułki"),
+    BakeryProduct("21", "Pączek", "szt.", 1.10, "Słodkie wypieki"),
+    BakeryProduct("22", "Drożdżówka z serem", "szt.", 1.50, "Słodkie wypieki"),
+    BakeryProduct("23", "Drożdżówka z makiem", "szt.", 1.50, "Słodkie wypieki"),
+    BakeryProduct("24", "Drożdżówka z jabłkiem", "szt.", 1.45, "Słodkie wypieki"),
+    BakeryProduct("25", "Rogal maślany", "szt.", 1.40, "Słodkie wypieki"),
+    BakeryProduct("26", "Rogal z czekoladą", "szt.", 1.60, "Słodkie wypieki"),
+    BakeryProduct("27", "Croissant", "szt.", 1.30, "Słodkie wypieki"),
+    BakeryProduct("28", "Muffin czekoladowy", "szt.", 1.50, "Słodkie wypieki"),
+    BakeryProduct("29", "Muffin jagodowy", "szt.", 1.50, "Słodkie wypieki"),
+    BakeryProduct("30", "Cynamonka", "szt.", 1.40, "Słodkie wypieki"),
+    BakeryProduct("31", "Sernik", "kg", 12.00, "Ciasta i desery"),
+    BakeryProduct("32", "Makowiec", "kg", 11.00, "Ciasta i desery"),
+    BakeryProduct("33", "Szarlotka", "kg", 10.00, "Ciasta i desery"),
+    BakeryProduct("34", "Brownie", "kg", 13.00, "Ciasta i desery"),
+    BakeryProduct("35", "Biszkopt z kremem", "kg", 14.00, "Ciasta i desery"),
+    BakeryProduct("36", "Ciasto marchewkowe", "kg", 12.00, "Ciasta i desery"),
+    BakeryProduct("37", "Karpatka", "kg", 13.00, "Ciasta i desery"),
+    BakeryProduct("38", "Keks", "kg", 11.00, "Ciasta i desery"),
+    BakeryProduct("39", "Piernik", "kg", 12.00, "Ciasta i desery"),
+    BakeryProduct("40", "Beza", "szt.", 2.50, "Ciasta i desery"),
+    BakeryProduct("41", "Pizza bułka", "szt.", 1.40, "Pozostałe"),
+    BakeryProduct("42", "Pasztecik z mięsem", "szt.", 1.50, "Pozostałe"),
+    BakeryProduct("43", "Pasztecik z kapustą", "szt.", 1.40, "Pozostałe"),
+    BakeryProduct("44", "Drożdżówka z budyniem", "szt.", 1.50, "Pozostałe"),
+    BakeryProduct("45", "Chleb czosnkowy", "szt.", 1.80, "Pozostałe"),
+    BakeryProduct("46", "Focaccia", "szt.", 2.20, "Pozostałe"),
+    BakeryProduct("47", "Sucharki", "kg", 8.00, "Pozostałe"),
+    BakeryProduct("48", "Bułka tarta", "kg", 3.50, "Pozostałe"),
+    BakeryProduct("49", "Ciastka kruche", "kg", 9.00, "Pozostałe"),
+    BakeryProduct("50", "Rogal z makiem", "szt.", 1.50, "Pozostałe")
 )
 
 class MainActivity : ComponentActivity() {
@@ -112,14 +108,41 @@ fun BakeryApp(context: Context) {
         context.getSharedPreferences("mazowsze_bakery", Context.MODE_PRIVATE)
     }
 
+    val products = remember {
+        mutableStateListOf<BakeryProduct>().apply {
+            val saved = runCatching {
+                JSONArray(prefs.getString("products", ""))
+            }.getOrNull()
+
+            if (saved != null && saved.length() > 0) {
+                for (i in 0 until saved.length()) {
+                    val p = saved.optJSONObject(i) ?: continue
+                    add(
+                        BakeryProduct(
+                            p.optString("id"),
+                            p.optString("name"),
+                            p.optString("unit"),
+                            p.optDouble("price"),
+                            p.optString("category")
+                        )
+                    )
+                }
+            } else {
+                addAll(defaultProducts)
+            }
+        }
+    }
+
     val quantities = remember {
         mutableStateMapOf<String, Int>().apply {
             val saved = runCatching {
                 JSONObject(prefs.getString("quantities", "{}") ?: "{}")
             }.getOrNull()
 
-            catalogue.forEach { product ->
-                put(product.name, saved?.optInt(product.name, 0) ?: 0)
+            products.forEach { product ->
+                val oldValue = saved?.optInt(product.id, -1) ?: -1
+                val oldNameValue = saved?.optInt(product.name, 0) ?: 0
+                put(product.id, if (oldValue >= 0) oldValue else oldNameValue)
             }
         }
     }
@@ -151,12 +174,8 @@ fun BakeryApp(context: Context) {
 
     var tab by remember { mutableStateOf("Zamówienie") }
     var category by remember { mutableStateOf("Wszystkie") }
-    var editingProduct by remember { mutableStateOf<BakeryProduct?>(null) }
-var editedName by remember { mutableStateOf("") }
-
-    val total = catalogue.sumOf {
-        it.price * (quantities[it.name] ?: 0)
-    }
+    var editingId by remember { mutableStateOf<String?>(null) }
+    var editedName by remember { mutableStateOf("") }
 
     val categories = listOf(
         "Wszystkie",
@@ -167,10 +186,29 @@ var editedName by remember { mutableStateOf("") }
         "Pozostałe"
     )
 
+    val total = products.sumOf {
+        it.price * (quantities[it.id] ?: 0)
+    }
+
+    fun saveProducts() {
+        val json = JSONArray()
+        products.forEach { p ->
+            json.put(
+                JSONObject()
+                    .put("id", p.id)
+                    .put("name", p.name)
+                    .put("unit", p.unit)
+                    .put("price", p.price)
+                    .put("category", p.category)
+            )
+        }
+        prefs.edit().putString("products", json.toString()).apply()
+    }
+
     fun saveQuantities() {
         val json = JSONObject()
-        quantities.forEach { (name, count) ->
-            json.put(name, count)
+        quantities.forEach { (id, count) ->
+            json.put(id, count)
         }
         prefs.edit().putString("quantities", json.toString()).apply()
     }
@@ -180,7 +218,6 @@ var editedName by remember { mutableStateOf("") }
         history.forEach { order ->
             val lines = JSONArray()
             order.lines.forEach { lines.put(it) }
-
             json.put(
                 JSONObject()
                     .put("date", order.date)
@@ -232,11 +269,10 @@ var editedName by remember { mutableStateOf("") }
                     letterSpacing = 3.sp
                 )
                 Text(
-                    "BAKERY  •  ZAMÓWIENIA",
+                    "BAKERY • ZAMÓWIENIA",
                     color = Gold,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp
+                    fontWeight = FontWeight.Bold
                 )
 
                 Spacer(Modifier.height(18.dp))
@@ -250,7 +286,7 @@ var editedName by remember { mutableStateOf("") }
                             color = Ink
                         )
                         Text(
-                            "50 produktów • ceny przykładowe • GBP (£)",
+                            "50 produktów • GBP (£)",
                             color = Color.Gray,
                             fontSize = 12.sp
                         )
@@ -276,11 +312,10 @@ var editedName by remember { mutableStateOf("") }
                             Modifier.weight(1f),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(
-                                catalogue.filter {
-                                    category == "Wszystkie" || it.category == category
-                                }
-                            ) { product ->
+                            items(products.filter {
+                                category == "Wszystkie" || it.category == category
+                            }, key = { it.id }) { product ->
+
                                 Card(
                                     shape = RoundedCornerShape(14.dp),
                                     colors = CardDefaults.cardColors(
@@ -290,7 +325,7 @@ var editedName by remember { mutableStateOf("") }
                                     Row(
                                         Modifier
                                             .fillMaxWidth()
-                                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                                            .padding(10.dp),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Column(Modifier.weight(1f)) {
@@ -308,20 +343,21 @@ var editedName by remember { mutableStateOf("") }
                                                 color = Color.Gray,
                                                 fontSize = 12.sp
                                             )
-                                        }
-                                        TextButton(
-    onClick = {
-        editingProduct = product
-        editedName = product.name
-    }
-) {
-    Text("Edytuj", color = Gold)
+                                            TextButton(
+                                                onClick = {
+                                                    editingId = product.id
+                                                    editedName = product.name
+                                                },
+                                                contentPadding = PaddingValues(0.dp)
+                                            ) {
+                                                Text("Edytuj nazwę", color = Gold)
+                                            }
                                         }
 
                                         IconButton(onClick = {
-                                            quantities[product.name] = maxOf(
+                                            quantities[product.id] = maxOf(
                                                 0,
-                                                (quantities[product.name] ?: 0) - 1
+                                                (quantities[product.id] ?: 0) - 1
                                             )
                                             saveQuantities()
                                         }) {
@@ -329,13 +365,13 @@ var editedName by remember { mutableStateOf("") }
                                         }
 
                                         Text(
-                                            (quantities[product.name] ?: 0).toString(),
+                                            (quantities[product.id] ?: 0).toString(),
                                             fontWeight = FontWeight.Bold
                                         )
 
                                         IconButton(onClick = {
-                                            quantities[product.name] =
-                                                (quantities[product.name] ?: 0) + 1
+                                            quantities[product.id] =
+                                                (quantities[product.id] ?: 0) + 1
                                             saveQuantities()
                                         }) {
                                             Text("+", fontSize = 21.sp)
@@ -366,13 +402,13 @@ var editedName by remember { mutableStateOf("") }
 
                                 Button(
                                     onClick = {
-                                        val lines = catalogue
-                                            .filter { (quantities[it.name] ?: 0) > 0 }
+                                        val lines = products
+                                            .filter { (quantities[it.id] ?: 0) > 0 }
                                             .map {
-                                                "\${it.name}: \${quantities[it.name]} \${it.unit} — £%.2f"
+                                                "${it.name}: ${quantities[it.id]} ${it.unit} — £%.2f"
                                                     .format(
                                                         Locale.UK,
-                                                        it.price * (quantities[it.name] ?: 0)
+                                                        it.price * (quantities[it.id] ?: 0)
                                                     )
                                             }
 
@@ -388,8 +424,8 @@ var editedName by remember { mutableStateOf("") }
                                             )
                                             saveHistory()
 
-                                            catalogue.forEach {
-                                                quantities[it.name] = 0
+                                            products.forEach {
+                                                quantities[it.id] = 0
                                             }
                                             saveQuantities()
                                         }
@@ -420,10 +456,7 @@ var editedName by remember { mutableStateOf("") }
                         Spacer(Modifier.height(10.dp))
 
                         if (history.isEmpty()) {
-                            Text(
-                                "Nie zapisano jeszcze żadnych zamówień.",
-                                color = Color.Gray
-                            )
+                            Text("Nie zapisano jeszcze zamówień.", color = Color.Gray)
                         } else {
                             LazyColumn(
                                 verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -434,113 +467,4 @@ var editedName by remember { mutableStateOf("") }
                                             containerColor = Color.White
                                         )
                                     ) {
-                                        Column(
-                                            Modifier
-                                                .fillMaxWidth()
-                                                .padding(14.dp)
-                                        ) {
-                                            Text(
-                                                order.date,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Ink
-                                            )
-                                            Spacer(Modifier.height(6.dp))
-                                            order.lines.forEach {
-                                                Text(it, fontSize = 13.sp, color = Ink)
-                                            }
-                                            Spacer(Modifier.height(6.dp))
-                                            Text(
-                                                "Razem: £%.2f".format(
-                                                    Locale.UK,
-                                                    order.total
-                                                ),
-                                                fontWeight = FontWeight.Bold,
-                                                color = Ink
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    else -> {
-                        Text(
-                            "Konto",
-                            fontSize = 21.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Ink
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            "Wersja demonstracyjna. Logowanie pracowników " +
-                                "i panel administratora zostaną dodane po " +
-                                "podłączeniu bezpiecznej bazy online.",
-                            color = Ink
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            "Zapisane zamówienia i ilości są przechowywane " +
-                                "tylko na tym telefonie.",
-                            color = Color.Gray,
-                            fontSize = 13.sp
-                        )
-                    }
-                }
-            }
-        }
-    }
-    if (editingProduct != null) {
-    AlertDialog(
-        onDismissRequest = {
-            editingProduct = null
-        },
-        title = {
-            Text("Edytuj nazwę produktu")
-        },
-        text = {
-            OutlinedTextField(
-                value = editedName,
-                onValueChange = { editedName = it },
-                label = { Text("Nazwa produktu") },
-                singleLine = true
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    val oldProduct = editingProduct!!
-                    val newName = editedName.trim()
-
-                    if (newName.isNotBlank() &&
-                        products.none {
-                            it.name.equals(newName, ignoreCase = true) &&
-                            it.name != oldProduct.name
-                        }
-                    ) {
-                        val index = products.indexOf(oldProduct)
-                        if (index >= 0) {
-                            products[index] = oldProduct.copy(name = newName)
-                            val oldQuantity = quantities.remove(oldProduct.name) ?: 0
-                            quantities[newName] = oldQuantity
-                            saveQuantities()
-                            saveProducts()
-                        }
-                    }
-                    editingProduct = null
-                }
-            ) {
-                Text("Zapisz")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = {
-                editingProduct = null
-            }) {
-                Text("Anuluj")
-            }
-        }
-    )
-    }
-
-
+                               
