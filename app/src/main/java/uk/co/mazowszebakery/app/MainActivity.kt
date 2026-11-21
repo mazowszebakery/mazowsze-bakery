@@ -174,6 +174,10 @@ fun BakeryApp(context: Context) {
 
     var tab by remember { mutableStateOf("Zamówienie") }
     var category by remember { mutableStateOf("Wszystkie") }
+    var editingId by remember { mutableStateOf<String?>(null) }
+var editedName by remember { mutableStateOf("") }
+var editedPrice by remember { mutableStateOf("") }
+var showClearHistoryConfirm by remember { mutableStateOf(false) }
     var editedPrice by remember { mutableStateOf("") }
 var showClearHistoryConfirm by remember { mutableStateOf(false) }
 
@@ -345,10 +349,9 @@ var showClearHistoryConfirm by remember { mutableStateOf(false) }
                                             )
                                             TextButton(
                                                 onClick = {
-                                                    var editingId by remember { mutableStateOf<String?>(null) }
-var editedName by remember { mutableStateOf("") }
-var editedPrice by remember { mutableStateOf("") }
-var showClearHistoryConfirm by remember { mutableStateOf(false) }
+                                                     editingId = product.id
+editedName = product.name
+editedPrice = product.price.toString()
                                                 },
                                                 contentPadding = PaddingValues(0.dp)
                                             ) {
