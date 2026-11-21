@@ -151,6 +151,8 @@ fun BakeryApp(context: Context) {
 
     var tab by remember { mutableStateOf("Zamówienie") }
     var category by remember { mutableStateOf("Wszystkie") }
+    var editingProduct by remember { mutableStateOf<BakeryProduct?>(null) }
+var editedName by remember { mutableStateOf("") }
 
     val total = catalogue.sumOf {
         it.price * (quantities[it.name] ?: 0)
@@ -306,6 +308,14 @@ fun BakeryApp(context: Context) {
                                                 color = Color.Gray,
                                                 fontSize = 12.sp
                                             )
+                                        }
+                                        TextButton(
+    onClick = {
+        editingProduct = product
+        editedName = product.name
+    }
+) {
+    Text("Edytuj", color = Gold)
                                         }
 
                                         IconButton(onClick = {
@@ -480,5 +490,57 @@ fun BakeryApp(context: Context) {
             }
         }
     }
-}
+    if (editingProduct != null) {
+    AlertDialog(
+        onDismissRequest = {
+            editingProduct = null
+        },
+        title = {
+            Text("Edytuj nazwę produktu")
+        },
+        text = {
+            OutlinedTextField(
+                value = editedName,
+                onValueChange = { editedName = it },
+                label = { Text("Nazwa produktu") },
+                singleLine = true
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val oldProduct = editingProduct!!
+                    val newName = editedName.trim()
+
+                    if (newName.isNotBlank() &&
+                        products.none {
+                            it.name.equals(newName, ignoreCase = true) &&
+                            it.name != oldProduct.name
+                        }
+                    ) {
+                        val index = products.indexOf(oldProduct)
+                        if (index >= 0) {
+                            products[index] = oldProduct.copy(name = newName)
+                            val oldQuantity = quantities.remove(oldProduct.name) ?: 0
+                            quantities[newName] = oldQuantity
+                            saveQuantities()
+                            saveProducts()
+                        }
+                    }
+                    editingProduct = null
+                }
+            ) {
+                Text("Zapisz")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                editingProduct = null
+            }) {
+                Text("Anuluj")
+            }
+        }
+    )
+    }
+
 
