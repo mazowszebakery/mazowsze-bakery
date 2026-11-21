@@ -174,8 +174,8 @@ fun BakeryApp(context: Context) {
 
     var tab by remember { mutableStateOf("Zamówienie") }
     var category by remember { mutableStateOf("Wszystkie") }
-    var editingId by remember { mutableStateOf<String?>(null) }
-    var editedName by remember { mutableStateOf("") }
+    var editedPrice by remember { mutableStateOf("") }
+var showClearHistoryConfirm by remember { mutableStateOf(false) }
 
     val categories = listOf(
         "Wszystkie",
@@ -262,7 +262,7 @@ fun BakeryApp(context: Context) {
                     .padding(16.dp)
             ) {
                 Text(
-                    "MAZOWSZE",
+                    "MAZOWSZE BAKERY",
                     color = Ink,
                     fontSize = 27.sp,
                     fontWeight = FontWeight.Black,
@@ -345,12 +345,14 @@ fun BakeryApp(context: Context) {
                                             )
                                             TextButton(
                                                 onClick = {
-                                                    editingId = product.id
-                                                    editedName = product.name
+                                                    var editingId by remember { mutableStateOf<String?>(null) }
+var editedName by remember { mutableStateOf("") }
+var editedPrice by remember { mutableStateOf("") }
+var showClearHistoryConfirm by remember { mutableStateOf(false) }
                                                 },
                                                 contentPadding = PaddingValues(0.dp)
                                             ) {
-                                                Text("Edytuj nazwę", color = Gold)
+                                                Text("Edytuj nazwę i cenę", color = Gold)
                                             }
                                         }
 
