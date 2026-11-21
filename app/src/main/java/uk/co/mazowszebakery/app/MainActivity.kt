@@ -468,3 +468,96 @@ fun BakeryApp(context: Context) {
                                         )
                                     ) {
                                
+
+                                    Column(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(14.dp)
+                                    ) {
+                                        Text(
+                                            order.date,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Ink
+                                        )
+                                        Spacer(Modifier.height(6.dp))
+                                        order.lines.forEach {
+                                            Text(it, fontSize = 13.sp, color = Ink)
+                                        }
+                                        Spacer(Modifier.height(6.dp))
+                                        Text(
+                                            "Razem: £%.2f".format(
+                                                Locale.UK,
+                                                order.total
+                                            ),
+                                            fontWeight = FontWeight.Bold,
+                                            color = Ink
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    else -> {
+                        Text(
+                            "Konto",
+                            fontSize = 21.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Ink
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "Logowanie pracowników i panel administratora wymagają podłączenia bezpiecznej bazy online.",
+                            color = Ink
+                        )
+                        Text(
+                            "Katalog i historia są obecnie zapisane tylko na tym telefonie.",
+                            color = Color.Gray,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            }
+        }
+
+        if (editingId != null) {
+            AlertDialog(
+                onDismissRequest = { editingId = null },
+                title = { Text("Edytuj nazwę produktu") },
+                text = {
+                    OutlinedTextField(
+                        value = editedName,
+                        onValueChange = { editedName = it },
+                        label = { Text("Nazwa produktu") },
+                        singleLine = true
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        val index = products.indexOfFirst {
+                            it.id == editingId
+                        }
+                        val newName = editedName.trim()
+                        val duplicate = products.any {
+                            it.id != editingId &&
+                                it.name.equals(newName, ignoreCase = true)
+                        }
+
+                        if (index >= 0 && newName.isNotBlank() && !duplicate) {
+                            products[index] = products[index].copy(name = newName)
+                            saveProducts()
+                        }
+                        editingId = null
+                    }) {
+                        Text("Zapisz")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { editingId = null }) {
+                        Text("Anuluj")
+                    }
+                }
+            )
+        }
+    }
+}
