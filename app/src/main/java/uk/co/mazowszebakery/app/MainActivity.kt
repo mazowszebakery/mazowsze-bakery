@@ -466,7 +466,7 @@ fun BakeryApp(context: Context) {
                             "Wersja demonstracyjna. Logowanie pracowników " +
                                 "i panel administratora zostaną dodane po " +
                                 "podłączeniu bezpiecznej bazy online.",
-                            color color = Ink
+                            color = Ink
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
